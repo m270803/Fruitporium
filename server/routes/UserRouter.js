@@ -3,27 +3,37 @@ const router = express.Router();
 const User = require("../modals/user-modal"); // Make sure the path to your User model is correct
 
 // Create a new user
-router.post('/create', async (req, res) => {
-  console.log("Received data:", req.body);  // Check request data structure
+// router.post('/create', async (req, res) => {
+//   console.log("Received data:", req.body);  // Check request data structure
 
-  const { uCredentials, uProfile, uAddress } = req.body;
+//   const { uCredentials, uProfile, uAddress } = req.body;
 
-  // Ensure email is present
-  if (!uCredentials || !uCredentials.uEmail) {
-    return res.status(400).send({ error: "Email is required" });
-  }
+//   // Ensure email is present
+//   if (!uCredentials || !uCredentials.uEmail) {
+//     return res.status(400).send({ error: "Email is required" });
+//   }
 
+//   try {
+//     const user = new User({
+//       uCredentials,
+//       uProfile,
+//       uAddress,
+//     });
+//     await user.save();
+//     res.status(201).send({ message: 'User created successfully' });
+//   } catch (err) {
+//     console.error("Error creating user:", err);
+//     res.status(400).send({ error: err.message });
+//   }
+// });
+// Create a new user
+router.post("/users", async (req, res) => {
   try {
-    const user = new User({
-      uCredentials,
-      uProfile,
-      uAddress,
-    });
-    await user.save();
-    res.status(201).send({ message: 'User created successfully' });
-  } catch (err) {
-    console.error("Error creating user:", err);
-    res.status(400).send({ error: err.message });
+    const newUser = new User(req.body);
+    await newUser.save();
+    res.status(201).json(newUser);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 });
 
